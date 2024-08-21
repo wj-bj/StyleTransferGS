@@ -34,8 +34,8 @@ dev = [
 line-length = 120
 
 [project.urls]
-"Homepage" = "https://feature-splatting.github.io"
-"Source" = "https://github.com/vuer-ai/feature-splatting"
+"Homepage" = "https://www.youtube.com/watch?v=33Z2bZXNBrI"
+"Source" = "https://github.com/wj-bj/StyleTransferGS"
 
 [project.entry-points."nerfstudio.method_configs"]
 splatfactoStyle = "splatfactoStyle.splatfactoStyle_config:splatfactoStyle_method"

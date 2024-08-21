@@ -65,7 +65,8 @@ cd nerfstudio
 pip install --upgrade pip setuptools
 pip install -e .
 
-# go the the styleGS project folder, where pyproject.toml is
+# go to the the styleGS project folder, where pyproject.toml is
+# git clone https://github.com/wj-bj/StyleTransferGS.git
 cd splatfactoStyle
 pip install -e .
 
@@ -78,10 +79,10 @@ pip uninstall gsplat
 pip install git+https://github.com/nerfstudio-project/gsplat.git
 ```
 ## Project hierarchy
-In oder to expand nerfstudio,  code files are put in relevant folders in nerfstudio project.
+In oder to expand nerfstudio,  run "pip install -e ."  in the project folder
 ```commandline
 📦project
- ┃ 📜pyproject.toml             // register inito nerfstudio
+ ┃ 📜pyproject.toml             // install and register inito nerfstudio
  ┣ 📂splatfactoStyle
  ┃ ┣ 📂utils
  ┃ ┃ ┣ 📜loss_utils.py          // helpful loss functions                
@@ -94,6 +95,10 @@ In oder to expand nerfstudio,  code files are put in relevant folders in nerfstu
  ┣ 📂outputs                    // The fold for ouput result 
  ┣ 📂...                       
  ```
+#### Explanation
+exporter.py need to replace the same file in Nerfstuido project, as the original file has limitation when exporting ply file
+
+
 ##  DataSet
 You can download the datasets of bicycle [here](https://drive.google.com/file/d/15lSwdbKBWuicjneRHSlTkQV9tqHqwjLy/view?usp=sharing), unzip it and place the folder into the data folder for input.
 
