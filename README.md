@@ -1,7 +1,7 @@
 # StyleTransferGS
 The project is to construct to Style transfer 3DGS
 ## Video Demonstration
-* The video demonstration is available to view [here](https://youtu.be/5JS3QZU3JSY).
+* The video demonstration is available to view [here](https://youtu.be/33Z2bZXNBrI).
 ## Introduction
 <p align="center">
     <img src="pics/Result.gif" height="250" width="450">
@@ -14,8 +14,8 @@ This project was built on top of [gaussian splatting for nerfstudio](https://git
 , which incorperates [gsplat](https://github.com/nerfstudio-project/gsplat) to train gaussian splats instead of the offical version of "3D Gaussian Splatting for Real-Time Radiance Field Rendering". The new method of gsplat reduces GPU memory usage and speeds up the training process.
 
 
-* The aim of the project is to support the function of Style transfer.
-* A new expasion for the command ns-train, splatfactoStyle, is added for Stylizing 3DGS
+* The aim of the project is to support the feature of Style transfer.
+* A new expansion for the command ns-train, splatfactoStyle, is added for Stylizing 3DGS
 
 
 ## Technique
@@ -26,42 +26,79 @@ Features in the project are list as follows:
 **Neural Style Transfer** : Use Vgg19 to extract feature maps from output and reference image, then decrease the discrepency of corresponding Gram matrice.
 
 ## Installation
-Please refer to the following link and video for the installation environment(there are some pitfalls)：
+Please refer to the following link and video for the installation environment (**there are some pitfalls!!!**). If this is your frist time, it's recommend to watch the video fist：
+
+Video:[How to install Nerfstudio 2024](https://www.youtube.com/watch?v=3JIpZd5XNAc)
 
 Github: 
 [nerfstudio_guassians from jonstephens85](https://github.com/jonstephens85/nerfstudio_guassians)
 
-Video:[How to install Nerfstudio 2024](https://www.youtube.com/watch?v=3JIpZd5XNAc)
+
 
 nerfstudio installation [quickstart](https://github.com/nerfstudio-project/nerfstudio/blob/main/docs/quickstart/installation.md#dependencies)
 
-if you encounter some erros during installation, pay attention on the following checklist(not sure if some of them has been fixed):
+if you encounter some erros during installation, pay attention on the following checklist (not sure if some of them has been fixed, most of them are caused by unmatched version):
 
 
-* [install tiny cuda issue](https://github.com/NVlabs/tiny-cuda-nn/issues/280)
+* [install tiny cuda issue](https://github.com/NVlabs/tiny-cuda-nn/issues/280) (search vcvars64.bat)
 * Don’t install the 17.10+ version visual studio, instead use the 17.9 version!
 * SET DISTUTILS_USE_SDK=1 # Windows only
-* don’t update setuptools to the latest version, instead use following: pip install setuptools==69.5.1
+* don’t update setuptools to the latest version(last time it failed), instead use following: pip install setuptools==69.5.1
+* if encounter gsplat error when training, [try reinstall gsplat](https://github.com/nerfstudio-project/gsplat) 
+
+Follow the [Nerfstudio installation instruction](https://docs.nerf.studio/quickstart/installation.html) to install a conda environment. For convenience, here are the commands. it takes a long time to comile when installing tiny-cuda
+```bash
+# Create an isolated conda environment
+conda create --name style_gs -y python=3.8
+conda activate style_gs
+
+# Install necessary NS dependencies
+pip install torch==2.1.2+cu118 torchvision==0.16.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
+conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
+
+pip install ninja git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch
+
+# Insatll nerfstudio
+git clone https://github.com/nerfstudio-project/nerfstudio.git
+cd nerfstudio
+pip install --upgrade pip setuptools
+pip install -e .
+
+# go the the styleGS project folder, where pyproject.toml is
+cd splatfactoStyle
+pip install -e .
 
 
+```
+if encounter gsplat error when doing command ns-train. try the following solution to reinstall gsplat
+```bash
+#if encounter gsplat error when doing command ns-train. try the following solution
+pip uninstall gsplat
+pip install git+https://github.com/nerfstudio-project/gsplat.git
+```
 ## Project hierarchy
 In oder to expand nerfstudio,  code files are put in relevant folders in nerfstudio project.
 ```commandline
 📦project
+ ┃ 📜pyproject.toml             // register inito nerfstudio
+ ┣ 📂splatfactoStyle
+ ┃ ┣ 📂utils
+ ┃ ┃ ┣ 📜loss_utils.py          // helpful loss functions                
+ ┃ ┣ 📜model.py                  //Implementation of training                     
+ ┃ ┣ 📜splatfactoStyle_config.py //"splatfactoStyle" configuration  
  ┣ 📂nerfstudio                 
- ┃ ┣ 📂models                      
- ┃ ┃ ┣ 📜splatfactoStyle.py     //Implementation of training progress  
- ┃ ┣ 📂utils                       
- ┃ ┃ ┣ 📜loss_utils.py          // various loss functions
- ┃ ┣ 📂configs                  // configuration for parameters 
- ┃ ┃ ┣ 📜method_configs.py      // "splatfactoStyle" configuration 
+ ┃ ┣ 📂scripts                      
+ ┃ ┃ ┣ exporter.py               //  used for export .ply file 
  ┣ 📂data                       // The fold for input data
  ┣ 📂outputs                    // The fold for ouput result 
  ┣ 📂...                       
  ```
+##  DataSet
+You can download the datasets of bicycle [here](https://drive.google.com/file/d/15lSwdbKBWuicjneRHSlTkQV9tqHqwjLy/view?usp=sharing), unzip it and place the folder into the data folder for input.
 
+some style images for stylization [here](https://drive.google.com/file/d/1nY2RaPTkzkBiwnfKpSqsRKeypz4Reox1/view?usp=sharing) and place this folder into into the data folder for input. 
 ##  Operation Instruction
-The video demonstration is available to view [here](https://youtu.be/33Z2bZXNBrI).
 
 You can find the explainaion of some commands: [here](https://docs.nerf.studio/reference/cli/index.html)
 
@@ -82,6 +119,9 @@ ns-process-data images --data data/mydata/bicycle/input --output-dir data/mydata
 ```bash
 ns-train splatfacto --max-num-iterations 3000 --data data/mydata/bicycle
 ```
+#### Explanation of Command Parameters:
+**`max-num-iterations`**: Specifies the maximum number of iterations for this training session, make sure it is greater than 3000<br>
+**`data`**: Points to the folder containing the content images that will be used in the training process.<br>
  <p align="center">
     <img src="pics/train1.png">
 </p>
@@ -94,7 +134,7 @@ ns-train splatfacto --max-num-iterations 3000 --data data/mydata/bicycle
  ns-train splatfactoStyle --max-num-iterations 400 --data data/mydata/bicycle --load-dir outputs/bicycle/splatfacto/2024-08-07_152903/nerfstudio_models --pipeline.model.style-path data/style/starrynight.jpg
  ```
 #### Explanation of Command Parameters:
-**`max-num-iterations`**: Specifies the maximum number of iterations for this training session<br>
+**`max-num-iterations`**: Specifies the maximum number of iterations for this training session, make sure it is greater than 400<br>
 **`data`**: Points to the folder containing the content images that will be used in the training process.<br>
 **`load-dir`**: Specifies the directory from which to load the checkpoint of the previously trained model. This ensures that the current training starts from where the previous session ended<br>
 **`pipeline.model.style-path`**: Provides the file path to the reference image that will be used to apply the desired style during the stylized training process

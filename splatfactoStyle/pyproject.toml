@@ -1,0 +1,48 @@
+[project]
+name = "splatfactoStyle"
+version = "0.0.2"
+description = "Stylize Splatting"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+keywords = ["gaussian splatting", "stylize splatting"]
+authors = [
+    { name = "JW", email = "test@163.com" },
+]
+
+dependencies = [
+    "einops",
+    "ftfy",
+    "gdown",
+    "matplotlib",
+    "nerfstudio",
+    "numpy",
+    "gsplat>=1.0.0",
+    "pillow",
+    "regex",
+    "torchtyping",
+    "tqdm",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+]
+
+[tool.black]
+line-length = 120
+
+[project.urls]
+"Homepage" = "https://feature-splatting.github.io"
+"Source" = "https://github.com/vuer-ai/feature-splatting"
+
+[project.entry-points."nerfstudio.method_configs"]
+splatfactoStyle = "splatfactoStyle.splatfactoStyle_config:splatfactoStyle_method"
+
+[tool.setuptools.packages]
+find = { include = ["splatfactoStyle", "splatfactoStyle.*"] }
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
